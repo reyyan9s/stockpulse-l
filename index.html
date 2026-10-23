@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StockPulse Terminal — Real-Time Market Analytics & Charting</title>
+  <meta name="description" content="High-precision stock market workstation featuring real-time TradingView technical charting, live asset feeds, watchlist tracking, and gold commodity analytics.">
+  
+  <!-- Typography: Plus Jakarta Sans for UI, JetBrains Mono for financial tabular data -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Main Workstation Header -->
+  <header class="terminal-header">
+    <div class="header-inner">
+      <div class="brand-group">
+        <img src="logo.svg" alt="StockPulse Logo" class="brand-icon" width="32" height="32">
+        <div class="brand-text">
+          <span class="brand-title">StockPulse</span>
+          <span class="brand-tag">FINANCIAL TERMINAL</span>
+        </div>
+        <div class="header-status-pill" title="Data Feed Status">
+          <span class="pulse-indicator"></span>
+          <span id="backend-status">Live (MySQL)</span>
+        </div>
+      </div>
+
+      <!-- Quick Jump Navigation -->
+      <nav class="terminal-nav" aria-label="Terminal Sections">
+        <a href="#chart-section" class="nav-tab active">Technical Chart</a>
+        <a href="#stocks-section" class="nav-tab">Market Quotes</a>
+        <a href="#watchlist-section" class="nav-tab">Watchlist</a>
+        <a href="#add-stock-section" class="nav-tab">+ Add Asset</a>
+      </nav>
+
+      <!-- Search & Command Bar -->
+      <div class="header-actions">
+        <div class="search-wrapper">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input 
+            type="text" 
+            id="search-input" 
+            class="header-search-input" 
+            placeholder="Search symbol or asset (press '/' to focus)..." 
+            autocomplete="off"
+            spellcheck="false"
+          >
+          <kbd class="search-kbd">/</kbd>
+        </div>
+        <button id="refresh-btn" class="icon-btn" title="Refresh market quotes" type="button">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.19"/>
+          </svg>
+          <span>Refresh</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Global Toast / Message Notification -->
+  <div id="message-box" class="toast-notification hidden" role="status" aria-live="polite"></div>
+
+  <!-- Main Terminal Body -->
+  <main class="terminal-main">
+
+    <!-- 1. Interactive TradingView Chart Section -->
+    <section id="chart-section" class="terminal-panel chart-panel">
+      <div class="panel-header chart-panel-header">
+        <div class="chart-info-group">
+          <div class="symbol-badge-row">
+            <span id="active-symbol-badge" class="symbol-pill">AAPL</span>
+            <span id="active-exchange-badge" class="exchange-pill">NASDAQ</span>
+          </div>
+          <div>
+            <h2 id="chart-title">AAPL — Apple Inc.</h2>
+            <p id="chart-subtitle" class="chart-meta">Live technical charting powered by TradingView Advanced Embed</p>
+          </div>
+        </div>
+
+        <!-- Quick Symbol Switcher Chips & Timeframe Controls -->
+        <div class="chart-controls-cluster">
+          <!-- Asset Chips -->
+          <div class="quick-asset-chips" id="quick-asset-chips">
+            <button type="button" class="chip-btn active" data-symbol="AAPL">AAPL</button>
+            <button type="button" class="chip-btn" data-symbol="MSFT">MSFT</button>
+            <button type="button" class="chip-btn" data-symbol="GOOGL">GOOGL</button>
+            <button type="button" class="chip-btn" data-symbol="AMZN">AMZN</button>
+            <button type="button" class="chip-btn gold-chip" data-symbol="XAUUSD">★ Gold (XAUUSD)</button>
+          </div>
+
+          <!-- Hidden native select for standard change handler compatibility -->
+          <div class="symbol-select-wrap">
+            <label for="chart-stock-select" class="visually-hidden">Select Stock</label>
+            <select id="chart-stock-select" class="chart-select">
+              <!-- Dynamically populated -->
+            </select>
+          </div>
+
+          <!-- Timeframe Selector -->
+          <div class="timeframe-group" role="group" aria-label="Chart Timeframe">
+            <button type="button" class="timeframe-btn" data-timeframe="15">15m</button>
+            <button type="button" class="timeframe-btn" data-timeframe="60">1h</button>
+            <button type="button" class="timeframe-btn active" data-timeframe="D">1D</button>
+            <button type="button" class="timeframe-btn" data-timeframe="W">1W</button>
+            <button type="button" class="timeframe-btn" data-timeframe="M">1M</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TradingView Widget Embed Wrapper -->
+      <div class="tradingview-viewport">
+        <div id="tradingview-chart-container" class="tradingview-widget-container">
+          <div class="tradingview-widget-container__widget"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Market Overview Cards Grid -->
+    <section id="stocks-section" class="terminal-panel market-panel">
+      <div class="panel-header">
+        <div class="panel-title-area">
+          <h3>Market Quotes</h3>
+          <span class="record-counter" id="quotes-count-badge">5 Assets Tracked</span>
+        </div>
+        <div class="panel-filter-tabs">
+          <button type="button" class="filter-tab active" data-filter="all">All Assets</button>
+          <button type="button" class="filter-tab" data-filter="tech">Tech</button>
+          <button type="button" class="filter-tab" data-filter="commodities">Commodities</button>
+          <button type="button" class="filter-tab" data-filter="gainers">Gainers</button>
+        </div>
+      </div>
+
+      <!-- JavaScript Injected Stock Cards -->
+      <div id="stocks-grid" class="stocks-grid">
+        <div class="skeleton-card">
+          <div class="skeleton-line short"></div>
+          <div class="skeleton-line long"></div>
+          <div class="skeleton-line medium"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Bottom Split Grid: Watchlist & Add Stock Form -->
+    <div class="bottom-terminal-grid">
+
+      <!-- Watchlist Card / Panel -->
+      <section id="watchlist-section" class="terminal-panel watchlist-panel">
+        <div class="panel-header">
+          <div class="panel-title-area">
+            <h3>Active Watchlist</h3>
+            <span class="watchlist-pill"><span id="watchlist-count">0</span> pinned</span>
+          </div>
+        </div>
+        <div class="watchlist-scroll-container">
+          <ul id="watchlist-items" class="watchlist-list">
+            <li class="empty-watchlist">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="empty-icon">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+              </svg>
+              <span>No pinned assets. Click <strong>+ Watch</strong> on any quote above.</span>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Add New Asset to Database Form -->
+      <section id="add-stock-section" class="terminal-panel add-stock-panel">
+        <div class="panel-header">
+          <div class="panel-title-area">
+            <h3>Add Market Asset</h3>
+            <span class="subtext">Stores directly into MySQL database</span>
+          </div>
+        </div>
+        <form id="add-stock-form" class="fintech-form" novalidate>
+          <div class="form-row two-col">
+            <div class="input-block">
+              <label for="stock-symbol">Ticker Symbol</label>
+              <input 
+                type="text" 
+                id="stock-symbol" 
+                name="symbol" 
+                placeholder="e.g. NVDA or TSLA" 
+                maxlength="10" 
+                required
+                autocomplete="off"
+              >
+            </div>
+            <div class="input-block">
+              <label for="stock-company">Asset Name</label>
+              <input 
+                type="text" 
+                id="stock-company" 
+                name="company_name" 
+                placeholder="e.g. NVIDIA Corporation" 
+                maxlength="100" 
+                required
+                autocomplete="off"
+              >
+            </div>
+          </div>
+
+          <div class="form-row two-col">
+            <div class="input-block">
+              <label for="stock-price">Last Price (USD)</label>
+              <div class="price-input-wrapper">
+                <span class="currency-prefix">$</span>
+                <input 
+                  type="number" 
+                  id="stock-price" 
+                  name="price" 
+                  placeholder="138.50" 
+                  step="0.01" 
+                  min="0.01" 
+                  required
+                >
+              </div>
+            </div>
+            <div class="input-block">
+              <label for="stock-change">24h Net Change (%)</label>
+              <div class="price-input-wrapper">
+                <span class="currency-prefix">%</span>
+                <input 
+                  type="number" 
+                  id="stock-change" 
+                  name="change_percent" 
+                  placeholder="+2.40 or -1.15" 
+                  step="0.01" 
+                  required
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" id="add-stock-btn" class="submit-action-btn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              <span>Add Asset to Market</span>
+            </button>
+          </div>
+        </form>
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- Client Script -->
+  <script src="script.js"></script>
+</body>
+</html>

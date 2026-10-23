@@ -1,0 +1,24 @@
+{
+  "name": "stockpulse-lite",
+  "version": "1.0.0",
+  "description": "A beginner-friendly stock market dashboard for Web Technology Lab practical exam",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": [
+    "wtl",
+    "stocks",
+    "express",
+    "mysql",
+    "javascript"
+  ],
+  "author": "Reyyan Sayyed",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mysql2": "^3.12.0"
+  }
+}

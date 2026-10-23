@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" width="36" height="36" fill="none">
+  <rect width="36" height="36" rx="8" fill="#141c2e" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+  <!-- Subtle Candlestick & Pulse Line -->
+  <line x1="11" y1="9" x2="11" y2="27" stroke="#10b981" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+  <rect x="9" y="13" width="4" height="9" rx="1" fill="#10b981"/>
+  
+  <line x1="25" y1="8" x2="25" y2="26" stroke="#38bdf8" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+  <rect x="23" y="11" width="4" height="8" rx="1" fill="#38bdf8"/>
+  
+  <!-- Dynamic Pulse Path -->
+  <path d="M6 21 L12 21 L16 12 L20 24 L24 16 L30 16" stroke="#f1f5f9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
