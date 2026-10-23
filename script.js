@@ -13,11 +13,11 @@ let activeFilter = 'all';
 
 // Fallback demo data in case backend server is unreachable
 const DEMO_STOCKS = [
-  { id: 1, symbol: 'AAPL', company_name: 'Apple Inc.', price: 182.50, change_percent: 1.25 },
-  { id: 2, symbol: 'MSFT', company_name: 'Microsoft Corporation', price: 420.10, change_percent: -0.45 },
-  { id: 3, symbol: 'GOOGL', company_name: 'Alphabet Inc.', price: 175.30, change_percent: 0.85 },
-  { id: 4, symbol: 'AMZN', company_name: 'Amazon.com Inc.', price: 185.90, change_percent: -1.10 },
-  { id: 5, symbol: 'XAUUSD', company_name: 'Gold / US Dollar (Spot)', price: 2735.50, change_percent: 0.65 }
+  { id: 1, symbol: 'AAPL', company_name: 'Apple Inc.', price: 227.83, change_percent: -0.45 },
+  { id: 2, symbol: 'MSFT', company_name: 'Microsoft Corporation', price: 425.79, change_percent: 0.81 },
+  { id: 3, symbol: 'GOOGL', company_name: 'Alphabet Inc.', price: 164.44, change_percent: 1.57 },
+  { id: 4, symbol: 'AMZN', company_name: 'Amazon.com Inc.', price: 187.83, change_percent: 0.78 },
+  { id: 5, symbol: 'XAUUSD', company_name: 'Gold / US Dollar (Spot)', price: 3994.00, change_percent: 0.65 }
 ];
 
 // Exchange mapping for proper TradingView technical feed

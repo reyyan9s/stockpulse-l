@@ -45,11 +45,11 @@ async function initDb() {
     if (rows[0].count === 0) {
       await connection.query(`
         INSERT INTO stocks (symbol, company_name, price, change_percent) VALUES
-        ('AAPL', 'Apple Inc.', 182.50, 1.25),
-        ('MSFT', 'Microsoft Corporation', 420.10, -0.45),
-        ('GOOGL', 'Alphabet Inc.', 175.30, 0.85),
-        ('AMZN', 'Amazon.com Inc.', 185.90, -1.10),
-        ('XAUUSD', 'Gold / US Dollar (Spot)', 2735.50, 0.65)
+        ('AAPL', 'Apple Inc.', 227.83, -0.45),
+        ('MSFT', 'Microsoft Corporation', 425.79, 0.81),
+        ('GOOGL', 'Alphabet Inc.', 164.44, 1.57),
+        ('AMZN', 'Amazon.com Inc.', 187.83, 0.78),
+        ('XAUUSD', 'Gold / US Dollar (Spot)', 3994.00, 0.65)
       `);
       console.log('🌱 [MySQL] Seeded default market assets including Gold (XAUUSD).');
     }
