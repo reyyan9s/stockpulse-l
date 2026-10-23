@@ -30,12 +30,6 @@ npm start
 - **Health Check API:** [http://localhost:3000/api/health](http://localhost:3000/api/health)
 - **Stocks REST API:** [http://localhost:3000/api/stocks](http://localhost:3000/api/stocks)
 
-### 5. Running the Standalone WTL Practical Demos
-- **CSS Types (Topic 3):** Open [http://localhost:3000/wtl-topics/topic3-css-types.html](http://localhost:3000/wtl-topics/topic3-css-types.html)
-- **React Demo (Topics 8 & 9):** Open [http://localhost:3000/wtl-topics/react-demo.html](http://localhost:3000/wtl-topics/react-demo.html)
-- **PHP Sessions (Topic 12):** Run `php -S localhost:8000 -t wtl-topics` and visit [http://localhost:8000/php-session-demo.php](http://localhost:8000/php-session-demo.php)
-- **PHP MySQL CRUD (Topic 13):** Visit [http://localhost:8000/php-mysql-crud.php](http://localhost:8000/php-mysql-crud.php)
-
 ---
 
 ## Part B — The Five Main Files Explained
