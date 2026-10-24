@@ -86,35 +86,6 @@ body {
   border: 0;
 }
 
-/* 3. LIVE STATUS INDICATOR */
-.header-status-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  font-size: 0.72rem;
-  font-family: var(--font-mono);
-  color: var(--text-muted);
-  background-color: var(--bg-panel-elevated);
-  border: 1px solid var(--border-subtle);
-  padding: 0.2rem 0.6rem;
-  border-radius: var(--radius-full);
-  margin-left: 0.5rem;
-}
-
-.pulse-indicator {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background-color: var(--color-positive);
-  box-shadow: 0 0 8px var(--color-positive);
-  animation: pulse-ring 2.5s infinite;
-}
-
-@keyframes pulse-ring {
-  0% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.4; transform: scale(0.9); }
-  100% { opacity: 1; transform: scale(1); }
-}
 
 /* 4. TERMINAL HEADER */
 .terminal-header {

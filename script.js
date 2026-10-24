@@ -47,7 +47,6 @@ const searchInput = document.querySelector('#search-input');
 const addStockForm = document.querySelector('#add-stock-form');
 const messageBox = document.querySelector('#message-box');
 const refreshBtn = document.querySelector('#refresh-btn');
-const backendStatus = document.querySelector('#backend-status');
 const watchlistItems = document.querySelector('#watchlist-items');
 const watchlistCount = document.querySelector('#watchlist-count');
 const chartSelect = document.querySelector('#chart-stock-select');
@@ -140,7 +139,6 @@ async function fetchStocks() {
       filterAndRenderStocks();
       updateChartControls(stocks);
       initTradingViewChart(currentTvSymbol || 'AAPL', currentTvTimeframe);
-      updateBackendStatus(true);
     } else {
       throw new Error(result.error || 'Invalid data');
     }
@@ -150,29 +148,14 @@ async function fetchStocks() {
     filterAndRenderStocks();
     updateChartControls(stocks);
     initTradingViewChart(currentTvSymbol || 'AAPL', currentTvTimeframe);
-    updateBackendStatus(false);
   }
 }
 
 async function fetchHealth() {
   try {
-    const res = await fetch('/api/health');
-    const data = await res.json();
-    updateBackendStatus(res.ok && data.database === 'connected');
-  } catch {
-    updateBackendStatus(false);
-  }
-}
-
-function updateBackendStatus(isOnline) {
-  if (backendStatus) {
-    if (isOnline) {
-      backendStatus.textContent = 'FEED: LIVE (MySQL)';
-      backendStatus.style.color = '#10b981';
-    } else {
-      backendStatus.textContent = 'FEED: LOCAL (Offline)';
-      backendStatus.style.color = '#f43f5e';
-    }
+    await fetch('/api/health');
+  } catch (e) {
+    console.warn('Health check unavailable:', e.message);
   }
 }
 
