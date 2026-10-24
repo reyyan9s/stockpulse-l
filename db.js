@@ -104,54 +104,6 @@ async function deleteStock(id) {
   return result.affectedRows > 0;
 }
 
-// 8. READ: Get historical price points for a stock symbol
-async function getStockHistory(symbol, range = '1D') {
-  const [rows] = await pool.query('SELECT * FROM stocks WHERE symbol = ?', [symbol.toUpperCase()]);
-  const currentPrice = rows.length > 0 ? Number(rows[0].price) : 150.00;
-  const changePercent = rows.length > 0 ? Number(rows[0].change_percent) : 0.00;
-
-  if (range === '1W') {
-    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
-    const startPrice = currentPrice * 0.96;
-    const step = (currentPrice - startPrice) / 4;
-    return days.map((day, i) => ({
-      time: day,
-      price: Number((startPrice + step * i + Math.sin(i) * (currentPrice * 0.015)).toFixed(2))
-    }));
-  }
-
-  if (range === '1M') {
-    const weeks = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
-    const startPrice = currentPrice * 0.93;
-    const step = (currentPrice - startPrice) / 3;
-    return weeks.map((w, i) => ({
-      time: w,
-      price: Number((startPrice + step * i + Math.sin(i) * (currentPrice * 0.02)).toFixed(2))
-    }));
-  }
-
-  if (range === '1Y') {
-    const months = ['Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'];
-    const startPrice = currentPrice * 0.84;
-    const step = (currentPrice - startPrice) / 11;
-    return months.map((m, i) => ({
-      time: m,
-      price: Number((startPrice + step * i + Math.sin(i * 1.2) * (currentPrice * 0.03)).toFixed(2))
-    }));
-  }
-
-  // Default: 1D (Intraday)
-  const times = ['09:30 AM', '10:30 AM', '11:30 AM', '12:30 PM', '01:30 PM', '02:30 PM', '03:30 PM', '04:00 PM'];
-  const startPrice = currentPrice / (1 + changePercent / 100);
-  const step = (currentPrice - startPrice) / 7;
-
-  return times.map((time, index) => {
-    const jitter = index === 7 ? 0 : Math.sin(index * 1.5) * (currentPrice * 0.006);
-    const price = Number((startPrice + step * index + jitter).toFixed(2));
-    return { time, price };
-  });
-}
-
 // Helper to check connection status
 function isDbConnected() {
   return isConnected;
@@ -165,8 +117,7 @@ module.exports = {
   getStockById,
   createStock,
   updateStock,
-  deleteStock,
-  getStockHistory
+  deleteStock
 };
 
 

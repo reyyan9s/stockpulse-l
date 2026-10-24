@@ -59,30 +59,6 @@ app.get('/api/stocks', async (req, res) => {
   }
 });
 
-// GET /api/stocks/:symbol/history — Historical price data for chart
-app.get('/api/stocks/:symbol/history', async (req, res) => {
-  const { symbol } = req.params;
-  const range = (req.query.range || '1D').toUpperCase();
-
-  try {
-    const history = await db.getStockHistory(symbol, range);
-    res.status(200).json({
-      success: true,
-      symbol: symbol.toUpperCase(),
-      range,
-      source: 'Simulated Market Data',
-      count: history.length,
-      data: history
-    });
-  } catch (error) {
-    console.error(`Error in GET /api/stocks/${symbol}/history:`, error.message);
-    res.status(500).json({
-      success: false,
-      error: 'Failed to retrieve stock history.'
-    });
-  }
-});
-
 
 // POST /api/stocks — Create a new stock
 app.post('/api/stocks', async (req, res) => {

@@ -65,8 +65,6 @@ When you need to make changes quickly, search for these exact terms in the respe
 
 - `GET /api/health` — System and database health status
 - `GET /api/stocks` — Retrieve all active market stocks
-- `GET /api/stocks/:symbol/history?range=1D` — Historical price points (supports `1D`, `1W`, `1M`, `1Y`)
 - `POST /api/stocks` — Add a new stock (requires `symbol`, `company_name`, `price`, `change_percent`)
 - `PUT /api/stocks/:id` — Update stock price and percentage
 - `DELETE /api/stocks/:id` — Remove stock from database
-# stockpulse-l
